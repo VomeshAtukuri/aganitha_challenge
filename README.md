@@ -1,101 +1,58 @@
-
 # 🚀 TinyLink — URL Shortener
 
-A modern, full-stack URL shortener built using **Next.js 14**, **Drizzle ORM**, **Neon Postgres**, and **TailwindCSS**.
+A modern, full-stack URL shortener built using **Next.js 15**, **Drizzle ORM**, **Neon Postgres**, and **TailwindCSS**.
 Users can create short links, view stats, delete links, and redirect using short codes — similar to Bit.ly.
 
 This project fulfills all requirements from the **TinyLink Take-Home Assignment**.
 
 # 🌐 Demo
 
-🔗 **Live URL:** **
+🔗 **Live URL:** *https://aganitha-challenge.vercel.app/*
 
 # 🧠 Features
 
 ### 🔗 Short Link Creation
 
-* Create short links using a **custom code** or **auto-generated code**
-* URL validation
-* Custom code uniqueness enforced
-* Inline errors + success states
+- Create short links using a **custom code** or **auto-generated code**
+- URL validation
+- Custom code uniqueness enforced
+- Inline errors + success states
 
 ### ↪️ Redirect System
 
-* Visiting `/{code}` triggers a **302 redirect**
-* Click count incremented
-* Last clicked timestamp updated
-* Deleted links return **404**
+- Visiting `/{code}` triggers a **302 redirect**
+- Click count incremented
+- Last clicked timestamp updated
+- Deleted links return **404**
 
 ### 📊 Stats Page
 
-* View detailed analytics for a specific link at `/code/{code}`
-* Includes click count + last clicked + created time
+- View detailed analytics for a specific link at `/code/{code}`
+- Includes click count + last clicked + created time
 
 ### 🗂️ Dashboard
 
-* Table of all links
-* Search by code or URL
-* Copy short link
-* Add + delete links
-* Responsive design
-* Clean UI using shadcn components
+- Table of all links
+- Search by code or URL
+- Copy short link
+- Add + delete links
+- Responsive design
+- Clean UI using shadcn components
 
 ### ❤️ Health Endpoint
 
-* `/healthz` returns `{ ok: true, version: "1.0" }`
-
----
+- `/healthz` returns `{ ok: true, version: "1.0" }`
 
 # 🏗️ Tech Stack
 
 | Layer      | Technology                     |
 | ---------- | ------------------------------ |
-| Framework  | **Next.js 14 (App Router)**    |
+| Framework  | **Next.js 15 (App Router)**    |
 | Database   | **Neon Postgres (Serverless)** |
 | ORM        | **Drizzle ORM**                |
 | UI         | **TailwindCSS + shadcn/ui**    |
 | Deployment | **Vercel**                     |
 | Language   | **TypeScript**                 |
-
----
-
-# 📁 File Structure
-
-```
-app/
- ├─ api/
- │   ├─ links/
- │   │   └─ route.ts          # POST, GET
- │   ├─ links/[code]/
- │   │   └─ route.ts          # GET stats, DELETE
- ├─ code/[code]/
- │   └─ page.tsx              # Stats page UI
- ├─ [code]/
- │   └─ route.ts              # Redirect handler
- ├─ page.tsx                  # Dashboard
-db/
- ├─ schema.ts                 # Drizzle schema
- ├─ drizzle.config.ts
-lib/
- ├─ db.ts                     # Neon + Drizzle client
- ├─ utils.ts                  # Short code generator
-```
-
----
-
-# 🗄️ Database Schema (Drizzle ORM)
-
-```ts
-export const links = pgTable("links", {
-  code: varchar("code", { length: 8 }).primaryKey(),
-  url: varchar("url", { length: 2048 }).notNull(),
-  clicks: integer("clicks").default(0),
-  lastClicked: timestamp("last_clicked"),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-```
-
----
 
 # 🧪 API Endpoints
 
@@ -152,15 +109,13 @@ Response:
 { "ok": true, "version": "1.0" }
 ```
 
----
-
 # 🧩 Installation & Setup
 
 ### 1️⃣ Clone repo
 
 ```sh
-git clone <repo-url>
-cd tinylink
+git clone https://github.com/VomeshAtukuri/aganitha_challenge.git
+cd aganitha_challenge
 ```
 
 ### 2️⃣ Install dependencies
@@ -178,12 +133,11 @@ DATABASE_URL=your-neon-url
 BASE_URL=http://localhost:3000
 ```
 
-You will also find `.env.example` for reference.
-
 ### 4️⃣ Run Drizzle migrations
 
 ```sh
-npx drizzle-kit push
+npx drizzle-kit generate
+npx drizzle-kit migrate
 ```
 
 ### 5️⃣ Start app locally
@@ -192,16 +146,12 @@ npx drizzle-kit push
 npm run dev
 ```
 
----
-
 # 🚀 Deployment (Vercel)
 
 1. Push repository to GitHub
 2. Import project in Vercel
 3. Add environment variables
 4. Deploy
-
----
 
 # 🧪 Test Scenarios (Autograder Compliance)
 
@@ -215,15 +165,10 @@ npm run dev
 ✔ Responsive UI
 ✔ Clean layout and UX
 
----
-
 # 🛠️ Future Improvements
 
-* QR code generation
-* API rate limiting
-* Auth for personal dashboards
-* Click history with charts
-* Expiring links
-
----
-
+- QR code generation
+- API rate limiting
+- Auth for personal dashboards
+- Click history with charts
+- Expiring links
