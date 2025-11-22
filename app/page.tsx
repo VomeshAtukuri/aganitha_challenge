@@ -70,7 +70,7 @@ export default function Dashboard() {
       });
 
       if (response.ok) {
-        const data = await response.json();
+        await response.json();
         setUrl("");
         setCustomCode("");
         fetchLinks();
@@ -79,6 +79,7 @@ export default function Dashboard() {
         toast.error("Failed to create link");
       }
     } catch (error) {
+      console.error("Error creating link:", error);
       toast.error("Failed to create link");
     } finally {
       setLoading(false);

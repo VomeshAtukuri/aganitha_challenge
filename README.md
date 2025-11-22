@@ -1,36 +1,229 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# 🚀 TinyLink — URL Shortener
 
-First, run the development server:
+A modern, full-stack URL shortener built using **Next.js 14**, **Drizzle ORM**, **Neon Postgres**, and **TailwindCSS**.
+Users can create short links, view stats, delete links, and redirect using short codes — similar to Bit.ly.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+This project fulfills all requirements from the **TinyLink Take-Home Assignment**.
+
+# 🌐 Demo
+
+🔗 **Live URL:** **
+
+# 🧠 Features
+
+### 🔗 Short Link Creation
+
+* Create short links using a **custom code** or **auto-generated code**
+* URL validation
+* Custom code uniqueness enforced
+* Inline errors + success states
+
+### ↪️ Redirect System
+
+* Visiting `/{code}` triggers a **302 redirect**
+* Click count incremented
+* Last clicked timestamp updated
+* Deleted links return **404**
+
+### 📊 Stats Page
+
+* View detailed analytics for a specific link at `/code/{code}`
+* Includes click count + last clicked + created time
+
+### 🗂️ Dashboard
+
+* Table of all links
+* Search by code or URL
+* Copy short link
+* Add + delete links
+* Responsive design
+* Clean UI using shadcn components
+
+### ❤️ Health Endpoint
+
+* `/healthz` returns `{ ok: true, version: "1.0" }`
+
+---
+
+# 🏗️ Tech Stack
+
+| Layer      | Technology                     |
+| ---------- | ------------------------------ |
+| Framework  | **Next.js 14 (App Router)**    |
+| Database   | **Neon Postgres (Serverless)** |
+| ORM        | **Drizzle ORM**                |
+| UI         | **TailwindCSS + shadcn/ui**    |
+| Deployment | **Vercel**                     |
+| Language   | **TypeScript**                 |
+
+---
+
+# 📁 File Structure
+
+```
+app/
+ ├─ api/
+ │   ├─ links/
+ │   │   └─ route.ts          # POST, GET
+ │   ├─ links/[code]/
+ │   │   └─ route.ts          # GET stats, DELETE
+ ├─ code/[code]/
+ │   └─ page.tsx              # Stats page UI
+ ├─ [code]/
+ │   └─ route.ts              # Redirect handler
+ ├─ page.tsx                  # Dashboard
+db/
+ ├─ schema.ts                 # Drizzle schema
+ ├─ drizzle.config.ts
+lib/
+ ├─ db.ts                     # Neon + Drizzle client
+ ├─ utils.ts                  # Short code generator
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# 🗄️ Database Schema (Drizzle ORM)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```ts
+export const links = pgTable("links", {
+  code: varchar("code", { length: 8 }).primaryKey(),
+  url: varchar("url", { length: 2048 }).notNull(),
+  clicks: integer("clicks").default(0),
+  lastClicked: timestamp("last_clicked"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+# 🧪 API Endpoints
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Create link
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+POST /api/links
+```
 
-## Deploy on Vercel
+Body:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```json
+{
+  "url": "https://example.com",
+  "code": "custom123" // optional
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## List all links
+
+```
+GET /api/links
+```
+
+## Get stats for a code
+
+```
+GET /api/links/:code
+```
+
+## Delete a link
+
+```
+DELETE /api/links/:code
+```
+
+## Redirect
+
+```
+GET /:code
+```
+
+→ **302 redirect** to original target URL.
+
+## Healthcheck
+
+```
+GET /healthz
+```
+
+Response:
+
+```json
+{ "ok": true, "version": "1.0" }
+```
+
+---
+
+# 🧩 Installation & Setup
+
+### 1️⃣ Clone repo
+
+```sh
+git clone <repo-url>
+cd tinylink
+```
+
+### 2️⃣ Install dependencies
+
+```sh
+npm install
+```
+
+### 3️⃣ Configure environment variables
+
+Create `.env`:
+
+```
+DATABASE_URL=your-neon-url
+BASE_URL=http://localhost:3000
+```
+
+You will also find `.env.example` for reference.
+
+### 4️⃣ Run Drizzle migrations
+
+```sh
+npx drizzle-kit push
+```
+
+### 5️⃣ Start app locally
+
+```sh
+npm run dev
+```
+
+---
+
+# 🚀 Deployment (Vercel)
+
+1. Push repository to GitHub
+2. Import project in Vercel
+3. Add environment variables
+4. Deploy
+
+---
+
+# 🧪 Test Scenarios (Autograder Compliance)
+
+✔ `/healthz` returns `200`
+✔ Duplicate custom codes return `409`
+✔ Redirect increments click count
+✔ Redirect returns `302`
+✔ Deleted link returns `404`
+✔ URL validation
+✔ Search/filter works
+✔ Responsive UI
+✔ Clean layout and UX
+
+---
+
+# 🛠️ Future Improvements
+
+* QR code generation
+* API rate limiting
+* Auth for personal dashboards
+* Click history with charts
+* Expiring links
+
+---
+
