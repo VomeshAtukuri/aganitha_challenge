@@ -153,18 +153,6 @@ npm run dev
 3. Add environment variables
 4. Deploy
 
-# 🧪 Test Scenarios (Autograder Compliance)
-
-✔ `/healthz` returns `200`
-✔ Duplicate custom codes return `409`
-✔ Redirect increments click count
-✔ Redirect returns `302`
-✔ Deleted link returns `404`
-✔ URL validation
-✔ Search/filter works
-✔ Responsive UI
-✔ Clean layout and UX
-
 # 🛠️ Future Improvements
 
 - QR code generation
